@@ -105,11 +105,30 @@
 			display: block;
 			margin: 8vh auto;
 		}
+    /*第五屏*/
+    .page-5{
+      background-color:#181818;
+    }
+    .page-5 .animal{
+      width: 45vw;
+      display: block;
+      margin: 8vh auto;
+    }
+    /*加载*/
 
+    div.loading {
+      width: 100vw;
+      height: 100vh;
+      background-image: url(images/180562.gif);
+      -webkit-background-size: cover;
+      background-size: cover;
+      background-position: center center;
+    }
   </style>
 </head>
 
 <body>
+  <div class="loading"></div>
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <div class="swiper-slide page-1">
@@ -138,15 +157,23 @@
         <img src="images/03-0428.png" class="ani" swiper-animate-effect="zoomInRight" swiper-animate-duration="0.5s" swiper-animate-delay="1s" alt="">
         <img src="images/03-0428Z1.png" alt="" class="ani" swiper-animate-effect="rotateInUpLeft" swiper-animate-duration="0.5s" swiper-animate-delay="1.5s" />
       </div>
+      <div class="swiper-slide page-5">
+        <img src="images/title_1.png" swiper-animate-effect="bounce" swiper-animate-duration="0.5s" class="ani title" alt="">
+        <img src="images/homeAnimal_7.gif" class="animal ani" alt="" swiper-animate-effect="bounceInUp" swiper-animate-duration="0.5s"  swiper-animate-delay="0.5s"/>
+        <img src="images/04-0428.png" class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.5s" swiper-animate-delay="1s" alt="">
+        <img src="images/04-0428-ZI.png" alt="" class="ani" swiper-animate-effect="flipInY" swiper-animate-duration="0.5s" swiper-animate-delay="1.5s" />
+      </div>
     </div>
   </div>
   <script src="js/swiper.min.js"></script>
   <script src="js/swiper.animate.min.js"></script>
   <script>
-
+  document.querySelector('.swiper-container').style.display = 'none'
   document.onreadystatechange = function () {//即在加载的过程中执行下面的代码
-    if(document.readyState=="complete"){//complete加载完成
 
+    if(document.readyState=="complete"){//complete加载完成
+        document.querySelector('.swiper-container').style.display = 'block'
+        document.querySelector('.loading').style.display = 'none'
         var mySwiper = new Swiper('.swiper-container', {
           direction:'vertical',
           on: {
