@@ -147,7 +147,7 @@
 
 <body>
   <div class="loading"></div>
-  <audio src="source/5c89b225eed2d10864.mp3" id="audio" ></audio>
+  <audio src="source/5c89b225eed2d10864.mp3" id="audio"></audio>
 
   <div class="music">
     <img src="images/music.png" alt="" />
@@ -205,11 +205,11 @@
           $('.loading').css('display','none')
 
 
-
-
-          // 加载完毕之后播放音乐
-          document.querySelector('#audio').play()
-
+          // 处理 ios 浏览器不能自动播放
+          // 用户只要触摸了屏幕一次就开始播放
+          $('html').one('touchstart',function(){
+            document.querySelector('#audio').play()
+          });
           // 处理点击音乐按钮停止或开始播放
           var state = true
           $(".music").click(function(){
