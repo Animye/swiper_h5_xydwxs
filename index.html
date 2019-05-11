@@ -130,10 +130,23 @@
     .swiper-pagination-bullet{
       border:1px solid #fff;
     }
+    /*loading 样式*/
+    .loading{
+      width: 100vw;
+      height: 100vh;
+      background-image: url("images/loading.gif");
+      -webkit-background-size: cover;
+      background-size: cover;
+      background-position: center center;
+      background-position: 0 0;
+      position: absolute;
+      z-index: 9999;
+    }
   </style>
 </head>
 
 <body>
+  <div class="loading"></div>
   <audio src="source/5c89b225eed2d10864.mp3" id="audio" autoplay="autoplay"></audio>
 
   <div class="music">
@@ -181,47 +194,60 @@
   <script src="js/swiper.animate.min.js"></script>
   <script src="js/jquery-3.4.1.min.js"> </script>
   <script>
+      // 要做 loading 处理
+      // 1.上来将 container 隐藏 将loading图出现
+      $('.swiper-container').css('display','none')
+      // 2.监听页面的内容是否加载完毕完毕之后隐藏loading图
+      document.onreadystatechange = function () {
+        if(document.readyState=="complete"){
+          // 页面加载完毕 loading 消失 container 出现
+          $('.swiper-container').css('display','block')
+          $('.loading').css('display','none')
 
-        // 处理 ios 浏览器不能自动播放
-        // 用户只要触摸了屏幕一次就开始播放
-       $('html').one('touchstart',function(){
-          console.log(1)
-          document.querySelector('#audio').play()
-        });
-      // 处理点击音乐按钮停止或开始播放
-      var state = true
-      document.querySelector(".music").onclick = function(){
-        if(state){
-          // 停止  可以进行 背景图切换
-          document.getElementById('audio').pause()
-          state = false
-          $(".music img").attr('src',"images/paused.png")
-        }else{
-          // 开始  可以进行 背景图切换
-          document.getElementById('audio').play()
-          state = true
-             $(".music img").attr('src',"images/music.png")
+
+          // 处理 ios 浏览器不能自动播放
+          // 用户只要触摸了屏幕一次就开始播放
+          $('html').one('touchstart',function(){
+            console.log(1)
+            document.querySelector('#audio').play()
+          });
+          // 处理点击音乐按钮停止或开始播放
+          var state = true
+          $(".music").click(function(){
+            if(state){
+              // 停止  可以进行 背景图切换
+              document.getElementById('audio').pause()
+              state = false
+              $(".music img").attr('src',"images/paused.png")
+            }else{
+              // 开始  可以进行 背景图切换
+              document.getElementById('audio').play()
+              state = true
+              $(".music img").attr('src',"images/music.png")
+            }
+          })
+          var mySwiper = new Swiper('.swiper-container', {
+            direction:'vertical',
+            loop:true,
+            pagination: {
+              el: '.swiper-pagination',
+            },
+            on: {
+              init: function() {
+                swiperAnimateCache(this); //隐藏动画元素
+                swiperAnimate(this); //初始化完成开始动画
+              },
+              slideChangeTransitionEnd: function() {
+                swiperAnimate(this);
+                //每个slide切换结束时也运行当前slide动画
+                // this.slides.eq(this.activeIndex).find('.ani').removeClass('ani');
+                // 动画只展现一次，去除ani类名
+              }
+            }
+          })
         }
       }
-    var mySwiper = new Swiper('.swiper-container', {
-      direction:'vertical',
-      loop:true,
-      pagination: {
-        el: '.swiper-pagination',
-      },
-      on: {
-        init: function() {
-          swiperAnimateCache(this); //隐藏动画元素
-          swiperAnimate(this); //初始化完成开始动画
-        },
-        slideChangeTransitionEnd: function() {
-          swiperAnimate(this);
-          //每个slide切换结束时也运行当前slide动画
-          // this.slides.eq(this.activeIndex).find('.ani').removeClass('ani');
-          // 动画只展现一次，去除ani类名
-        }
-      }
-    })
+
 
 
 
