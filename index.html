@@ -52,7 +52,7 @@
 		}
     /*每屏的顶部文字*/
 		.swiper-container .title{
-			margin-top: 4vh;
+			margin-top: 6vh;
 		}
     /*第一屏*/
     .page-1{
@@ -114,21 +114,31 @@
       display: block;
       margin: 8vh auto;
     }
-    /*加载*/
+    /*音乐*/
+    .music{
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      display: block;
+      width: 30px;
+      z-index: 999;
 
-    div.loading {
-      width: 100vw;
-      height: 100vh;
-      background-image: url(images/180562.gif);
-      -webkit-background-size: cover;
-      background-size: cover;
-      background-position: center center;
+    }
+    .swiper-pagination-bullet-active{
+      background-color: #fff;
+    }
+    .swiper-pagination-bullet{
+      border:1px solid #fff;
     }
   </style>
 </head>
 
 <body>
-  <div class="loading"></div>
+  <audio src="source/5c89b225eed2d10864.mp3" id="audio" autoplay="autoplay"></audio>
+
+  <div class="music">
+    <img src="images/music.png" alt="" />
+  </div>
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <div class="swiper-slide page-1">
@@ -165,33 +175,55 @@
         <img src="images/04-0428-ZI.png" alt="" class="ani" swiper-animate-effect="flipInY" swiper-animate-duration="0.5s" swiper-animate-delay="1.5s" />
       </div>
     </div>
+    <div class="swiper-pagination"></div>
   </div>
   <script src="js/swiper.min.js"></script>
   <script src="js/swiper.animate.min.js"></script>
+  <script src="js/jquery-3.4.1.min.js"> </script>
   <script>
-  document.querySelector('.swiper-container').style.display = 'none'
-  document.onreadystatechange = function () {//即在加载的过程中执行下面的代码
 
-    if(document.readyState=="complete"){//complete加载完成
-        document.querySelector('.swiper-container').style.display = 'block'
-        document.querySelector('.loading').style.display = 'none'
-        var mySwiper = new Swiper('.swiper-container', {
-          direction:'vertical',
-          on: {
-            init: function() {
-              swiperAnimateCache(this); //隐藏动画元素
-              swiperAnimate(this); //初始化完成开始动画
-            },
-            slideChangeTransitionEnd: function() {
-              swiperAnimate(this);
-              //每个slide切换结束时也运行当前slide动画
-              // this.slides.eq(this.activeIndex).find('.ani').removeClass('ani');
-              // 动画只展现一次，去除ani类名
-            }
-          }
-        })
-    }
-  }
+        // 处理 ios 浏览器不能自动播放
+        // 用户只要触摸了屏幕一次就开始播放
+       $('html').one('touchstart',function(){
+          console.log(1)
+          document.querySelector('#audio').play()
+        });
+      // 处理点击音乐按钮停止或开始播放
+      var state = true
+      document.querySelector(".music").onclick = function(){
+        if(state){
+          // 停止  可以进行 背景图切换
+          document.getElementById('audio').pause()
+          state = false
+          $(".music img").attr('src',"images/paused.png")
+        }else{
+          // 开始  可以进行 背景图切换
+          document.getElementById('audio').play()
+          state = true
+             $(".music img").attr('src',"images/music.png")
+        }
+      }
+    var mySwiper = new Swiper('.swiper-container', {
+      direction:'vertical',
+      loop:true,
+      pagination: {
+        el: '.swiper-pagination',
+      },
+      on: {
+        init: function() {
+          swiperAnimateCache(this); //隐藏动画元素
+          swiperAnimate(this); //初始化完成开始动画
+        },
+        slideChangeTransitionEnd: function() {
+          swiperAnimate(this);
+          //每个slide切换结束时也运行当前slide动画
+          // this.slides.eq(this.activeIndex).find('.ani').removeClass('ani');
+          // 动画只展现一次，去除ani类名
+        }
+      }
+    })
+
+
 
 
   </script>
