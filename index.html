@@ -199,6 +199,9 @@
   <script src="js/swiper.animate.min.js"></script>
   <script src="js/jquery-3.4.1.min.js"> </script>
   <script>
+
+
+
       // 要做 loading 处理
       // 1.上来将 container 隐藏 将loading图出现
       $('.swiper-container').css('display','none')
@@ -209,12 +212,22 @@
           $('.swiper-container').css('display','block')
           $('.loading').css('display','none')
 
-
-          // 处理 ios 浏览器不能自动播放
+          // 处理 ios 浏览器 微信 不能自动播放
           // 用户只要触摸了屏幕一次就开始播放
-          $('html').one('touchstart',function(){
-            document.querySelector('#audio').play()
-          });
+          function audioAutoPlay(id){
+            var audio = document.getElementById(id),
+              play = function(){
+                audio.play();
+                document.removeEventListener("touchstart",play, false);
+            };
+            audio.play();
+            document.addEventListener("WeixinJSBridgeReady", function () {
+              play();
+            },false);
+            document.addEventListener("touchstart",play, false);
+          }
+          audioAutoPlay('audio');
+
           // 处理点击音乐按钮停止或开始播放
           var state = true
           $(".music").click(function(){
